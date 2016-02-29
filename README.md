@@ -5,4 +5,10 @@ append account status information.
 
 It uses a demo API endpoint from WP Engine.
 
-There is an example of the system [available](http://ryanshoover.github.io/account-statuses/).
+To demo the system,
+
+1. Clone this repository to your local machine
+* Open the index.php file in your browser
+* Upload a CSV file
+	* The CSV file requires a header row
+	* The CSV file needs the first column to be the Account ID
