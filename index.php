@@ -6,7 +6,8 @@ $uploaddir = '/tmp/';
 
 $errors = [];
 
-if ( ! empty( $_FILES ) ) {
+if ( ! empty( $_FILES ) && isset( $_FILES['accounts-csv'] ) ) {
+
 	$upload_file = $uploaddir . basename($_FILES['accounts-csv']['name']);
 
 	if ( move_uploaded_file( $_FILES['accounts-csv']['tmp_name'], $upload_file ) ) {
@@ -69,17 +70,27 @@ body {
 
 		<form action="#" method="post" enctype="multipart/form-data" name="csv-upload">
 			<div class="row">
-				<div class="col-sm-5 col-sm-offset-1 form-group">
+				<div class="col-sm-5 form-group">
 					<label for="accounts-csv">CSV File</label>
 					<input type="file" name="accounts-csv" class="form-control">
-					<p class="help-block">Make sure the file is in the correct format.</p>
+					<p class="help-block">Make sure the file is in the correct format*</p>
 				</div>
 
-				<div class="col-sm-4 col-sm-offset-1 form-group">
+				<div class="col-sm-4 col-sm-offset-2 form-group">
 					<input type="submit" class="btn btn-lg btn-primary btn-block">
 				</div>
 			</div>
 		</form>
+
+		<div class="row text-muted">
+			<div class="col-sm-4 col-sm-offset-1">
+				<p>* Your CSV needs to have the following features</p>
+				<ul>
+					<li>A header row with labels for all the columns</li>
+					<li>The account ID as the first column</li>
+				</ul>
+			</div>
+		</div>
 	</main>
 
 	<footer class="footer text-right">

@@ -5,7 +5,7 @@ append account status information.
 
 It uses a demo API endpoint from WP Engine.
 
-To demo the system,
+To preview the system,
 
 1. Clone this repository to your local machine
 * Open the index.php file in your browser

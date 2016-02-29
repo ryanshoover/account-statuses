@@ -47,7 +47,7 @@ class WPEProcessCsv {
 	protected function __construct() {}
 
 	/**
-	 * The mother function. This will create the new CSV
+	 * The primary function. This will create the new CSV
 	 *
 	 * @param  string The path to a CSV file
 	 */
@@ -55,11 +55,14 @@ class WPEProcessCsv {
 		// Turn on line ending detection if it's not already set
 		ini_set('auto_detect_line_endings', true);
 
+		// Get all the relevant data
 		$this->get_csv( $file_path );
 		$this->get_api();
 
+		// Merge the records
 		$this->output_records = $this->create_output_records();
 
+		// Write out the new CSV
 		$this->put_new_csv( $this->output_records );
 	}
 
@@ -70,9 +73,11 @@ class WPEProcessCsv {
 	 * @param  string The path to the CSV file
 	 */
 	public function get_csv( $file_path ) {
-		$this->input_file 	= $this->open_input_file( $file_path );
+		$this->open_input_file( $file_path );
+
 		$this->header 		= $this->get_csv_header();
 		$this->csv_records 	= $this->get_csv_data();
+
 		$this->close_input_file();
 	}
 
@@ -83,7 +88,7 @@ class WPEProcessCsv {
 	 * @return file   The opened file structure
 	 */
 	private function open_input_file( $file_path ) {
-		return fopen( $file_path, "r" );
+		$this->input_file = fopen( $file_path, "r" );
 	}
 
 	/**
@@ -149,7 +154,7 @@ class WPEProcessCsv {
 	 * Wrapper function for the API methods
 	 */
 	public function get_api() {
-		$this->api_url = 'http://interview.wpengine.io/v1/accounts/';
+		$this->api_url = 'http://interview.wpengine.io/v1/accountsbrokenlink/';
 
 		$this->api_records = $this->get_api_records();
 	}
@@ -193,9 +198,15 @@ class WPEProcessCsv {
 		$data[] = $output_header;
 
 		foreach ( $this->csv_records as $id => $csv_record ) {
+			$api_record = [];
+
 			$key = array_search( $id, array_column( $this->api_records, 'account_id' ) );
 
-			$data[] = $this->merge_arrays( $id, $csv_record, $this->api_records[ $key ] );
+			if ( $key ) {
+				$api_record = $this->api_records[ $key ];
+			}
+
+			$data[] = $this->merge_arrays( $id, $csv_record, $api_record );
 		}
 
 		return $data;
